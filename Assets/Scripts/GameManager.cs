@@ -17,12 +17,12 @@ public class GameManager : MonoBehaviour {
 	private TimeManager timeManager;
 	private GameObject player;
 	private GameObject floor;
-	private Spawner spawner;
+	private ObstacleSpawner spawner;
 	private bool beatBestTime;
 
 	void Awake(){
 		floor = GameObject.Find ("Foreground");
-		spawner = GameObject.Find ("Spawner").GetComponent<Spawner> ();
+		spawner = GameObject.Find ("Spawner").GetComponent<ObstacleSpawner> ();
 		timeManager = GetComponent<TimeManager> ();
 	}
 
@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour {
 		pos.y = -((Screen.height / PixelPerfectCamera.pixelScale) / 2) + (floorHeight / 2);
 		floor.transform.position = pos;
 
-		spawner.active = false;
+		spawner.isActive = false;
 
 		Time.timeScale = 0;
 
@@ -75,7 +75,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void OnPlayerKilled(){
-		spawner.active = false;
+		spawner.isActive = false;
 
 		var playerDestroyScript = player.GetComponent<KillWhenOffscreen> ();
 		playerDestroyScript.Killed -= OnPlayerKilled;
@@ -94,7 +94,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void ResetGame(){
-		spawner.active = true;
+		spawner.isActive = true;
 
 		player = GameObjectUtil.Instantiate(playerPrefab, new Vector3(0, (Screen.height/PixelPerfectCamera.pixelScale)/2 + 100, 0));
 
