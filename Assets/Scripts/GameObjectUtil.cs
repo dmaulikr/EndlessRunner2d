@@ -4,15 +4,15 @@ using System.Collections.Generic;
 
 public class GameObjectUtil {
 
-	private static Dictionary<RecycleGameObject, ObjectPool> pools = new Dictionary<RecycleGameObject, ObjectPool> ();
+	private static Dictionary<ObstacleRecycle, ObstaclePool> pools = new Dictionary<ObstacleRecycle, ObstaclePool> ();
 
 	public static GameObject Instantiate(GameObject prefab, Vector3 pos){
 		GameObject instance = null;
 
-		var recycledScript = prefab.GetComponent<RecycleGameObject> ();
+		var recycledScript = prefab.GetComponent<ObstacleRecycle> ();
 		if (recycledScript != null) {
 			var pool = GetObjectPool (recycledScript);
-			instance = pool.NextObject (pos).gameObject;
+			instance = pool.GetNextObstacle (pos).gameObject;
 		} else {
 
 			instance = GameObject.Instantiate (prefab);
@@ -23,24 +23,24 @@ public class GameObjectUtil {
 
 	public static void Destroy(GameObject gameObject){
 
-		var recyleGameObject = gameObject.GetComponent<RecycleGameObject> ();
+		var recyleGameObject = gameObject.GetComponent<ObstacleRecycle> ();
 
 		if (recyleGameObject != null) {
-			recyleGameObject.Shutdown ();
+			recyleGameObject.Suspend ();
 		} else {
 			GameObject.Destroy (gameObject);
 		}
 	}
 
-	private static ObjectPool GetObjectPool(RecycleGameObject reference){
-		ObjectPool pool = null;
+	private static ObstaclePool GetObjectPool(ObstacleRecycle reference){
+		ObstaclePool pool = null;
 
 		if (pools.ContainsKey (reference)) {
 			pool = pools [reference];
 		} else {
 			var poolContainer = new GameObject(reference.gameObject.name + "ObjectPool");
-			pool = poolContainer.AddComponent<ObjectPool>();
-			pool.prefab = reference;
+			pool = poolContainer.AddComponent<ObstaclePool>();
+			pool.obstaclePrefab = reference;
 			pools.Add (reference, pool);
 		}
 

@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour {
 
 		var pos = floor.transform.position;
 		pos.x = 0;
-		pos.y = -((Screen.height / PixelPerfectCamera.pixelScale) / 2) + (floorHeight / 2);
+		pos.y = -((Screen.height / CameraScaler.pixelScale) / 2) + (floorHeight / 2);
 		floor.transform.position = pos;
 
 		spawner.isActive = false;
@@ -77,7 +77,7 @@ public class GameManager : MonoBehaviour {
 	void OnPlayerKilled(){
 		spawner.isActive = false;
 
-		var playerDestroyScript = player.GetComponent<KillWhenOffscreen> ();
+		var playerDestroyScript = player.GetComponent<ObstacleSuspendOffscreen> ();
 		playerDestroyScript.Killed -= OnPlayerKilled;
 
 		player.GetComponent<Rigidbody2D> ().velocity = Vector2.zero;
@@ -96,9 +96,9 @@ public class GameManager : MonoBehaviour {
 	void ResetGame(){
 		spawner.isActive = true;
 
-		player = GameObjectUtil.Instantiate(playerPrefab, new Vector3(0, (Screen.height/PixelPerfectCamera.pixelScale)/2 + 100, 0));
+		player = GameObjectUtil.Instantiate(playerPrefab, new Vector3(0, (Screen.height/CameraScaler.pixelScale)/2 + 100, 0));
 
-		var playerDestroyScript = player.GetComponent<KillWhenOffscreen> ();
+		var playerDestroyScript = player.GetComponent<ObstacleSuspendOffscreen> ();
 		playerDestroyScript.Killed += OnPlayerKilled;
 
 		gameStarted = true;

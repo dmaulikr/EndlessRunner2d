@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class KillWhenOffscreen : MonoBehaviour {
+public class ObstacleSuspendOffscreen : MonoBehaviour {
 
 	public delegate void OnKill();
 	public event OnKill Killed;
@@ -19,7 +19,7 @@ public class KillWhenOffscreen : MonoBehaviour {
 
 	void Start ()
     {
-		offscreenThresholdX = (Screen.width / PixelPerfectCamera.pixelScale) / 2 + offset;
+		offscreenThresholdX = (Screen.width / CameraScaler.pixelScale) / 2 + offset;
 	}
 	
 	void Update ()

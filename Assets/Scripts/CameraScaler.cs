@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class PixelPerfectCamera : MonoBehaviour {
+public class CameraScaler : MonoBehaviour {
 
 	public static float pixelScale = 1f;
 
@@ -9,6 +9,7 @@ public class PixelPerfectCamera : MonoBehaviour {
 	void Awake ()
     {
 		var camera = GetComponent<Camera> ();
+
         SetCameraSize(camera);
 	}
 
