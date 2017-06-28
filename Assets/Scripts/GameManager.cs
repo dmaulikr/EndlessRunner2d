@@ -26,7 +26,6 @@ public class GameManager : MonoBehaviour {
 		timeManager = GetComponent<TimeManager> ();
 	}
 
-	// Use this for initialization
 	void Start () {
 
 		var floorHeight = floor.transform.localScale.y;
@@ -96,7 +95,7 @@ public class GameManager : MonoBehaviour {
 	void ResetGame(){
 		spawner.isActive = true;
 
-		player = GameObjectUtil.Instantiate(playerPrefab, new Vector3(0, (Screen.height/CameraScaler.pixelScale)/2 + 100, 0));
+		player = ObjectPoolManager.CreateInstance(playerPrefab, new Vector3(0, (Screen.height/CameraScaler.pixelScale)/2 + 100, 0));
 
 		var playerDestroyScript = player.GetComponent<ObstacleSuspendOffscreen> ();
 		playerDestroyScript.Killed += OnPlayerKilled;

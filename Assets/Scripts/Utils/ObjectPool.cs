@@ -2,9 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class ObstaclePool : MonoBehaviour {
+public class ObjectPool : MonoBehaviour {
 
-	public ObstacleRecycle obstaclePrefab;
+	public ObstacleRecycle objectPrefab;
 
 	private List<ObstacleRecycle> obstaclePool = new List<ObstacleRecycle>();
 
@@ -31,7 +31,7 @@ public class ObstaclePool : MonoBehaviour {
 
     private ObstacleRecycle CreateNewObstacle(Vector3 pos)
     {
-        var obstacle = GameObject.Instantiate(obstaclePrefab);
+        var obstacle = GameObject.Instantiate(objectPrefab);
         obstacle.transform.position = pos;
         obstacle.transform.parent = transform;
 

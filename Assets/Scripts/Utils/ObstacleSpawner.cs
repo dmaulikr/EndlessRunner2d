@@ -23,7 +23,7 @@ public class ObstacleSpawner : MonoBehaviour {
 
 		if (isActive)
         {
-			GameObjectUtil.Instantiate(obstaclePrefabs[Random.Range(0, obstaclePrefabs.Length)], transform.position);
+			ObjectPoolManager.CreateInstance(obstaclePrefabs[Random.Range(0, obstaclePrefabs.Length)], transform.position);
 			ResetSpawnDelay();
 		}
 		StartCoroutine (GenerateObstacles ());

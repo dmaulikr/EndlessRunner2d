@@ -59,7 +59,7 @@ public class ObstacleSuspendOffscreen : MonoBehaviour {
 	public void Kill()
     {
 		isOffscreen = false;
-		GameObjectUtil.Destroy (gameObject);
+		ObjectPoolManager.SuspendInstance (gameObject);
 
 		if (Killed != null) {
 			Killed();
