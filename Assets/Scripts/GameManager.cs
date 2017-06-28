@@ -20,58 +20,75 @@ public class GameManager : MonoBehaviour {
 	private ObstacleSpawner spawner;
 	private bool beatBestTime;
 
-	void Awake(){
+	void Awake()
+    {
 		floor = GameObject.Find ("Foreground");
 		spawner = GameObject.Find ("Spawner").GetComponent<ObstacleSpawner> ();
 		timeManager = GetComponent<TimeManager> ();
 	}
 
-	void Start () {
-
-		var floorHeight = floor.transform.localScale.y;
-
-		var pos = floor.transform.position;
-		pos.x = 0;
-		pos.y = -((Screen.height / CameraScaler.pixelScale) / 2) + (floorHeight / 2);
-		floor.transform.position = pos;
+	void Start ()
+    {
+        PositionFloor();
 
 		spawner.isActive = false;
 
-		Time.timeScale = 0;
+        TimeManager.PauseTime();
+        bestTime = TimeManager.GetBestTime();
 
 		continueText.text = "PRESS ANY BUTTON TO START";
-
-		bestTime = PlayerPrefs.GetFloat ("BestTime");
 	}
+
+    void PositionFloor()
+    {
+        float floorHeight = floor.transform.localScale.y;
+
+        Vector3 pos = floor.transform.position;
+        pos.x = 0;
+        pos.y = -((Screen.height / CameraScaler.pixelScale) / 2) + (floorHeight / 2);
+
+        floor.transform.position = pos;
+    }
 	
-	// Update is called once per frame
-	void Update () {
-		if (!gameStarted && Time.timeScale == 0) {
+	void Update ()
+    {
+		if (!gameStarted && TimeManager.Paused) {
 
 			if(Input.anyKeyDown){
-
-				timeManager.ManipulateTime(1, 1f);
+				timeManager.ChangeTimeScaleTo(1, 1f);
 				ResetGame();
 			}
 		}
+        BlinkHUDText();
+        DisplayHUD();
 
-		if (!gameStarted) {
-			blinkTime ++;
-
-			if (blinkTime % 40 == 0) {
-				blink = !blink;
-			}
-
-			continueText.canvasRenderer.SetAlpha (blink ? 0 : 1);
-
-			var textColor = beatBestTime ? "#FF0" : "#FFF";
-
-			scoreText.text = "TIME: " + FormatTime (timeElapsed) + "\n<color="+textColor+">BEST: " + FormatTime (bestTime)+"</color>";
-		} else {
-			timeElapsed += Time.deltaTime;
-			scoreText.text = "TIME: "+FormatTime(timeElapsed);
-		}
+        timeElapsed += Time.deltaTime;
 	}
+
+    void DisplayHUD()
+    {
+        if (!gameStarted)
+        {
+            continueText.canvasRenderer.SetAlpha(blink ? 0 : 1);
+            string textColor = beatBestTime ? "#FF0" : "#FFF";
+
+            scoreText.text = "TIME: " + TimeManager.FormatTimeForHUD(timeElapsed) +
+                "\n<color=" + textColor + ">" + "BEST: " + TimeManager.FormatTimeForHUD(bestTime) + "</color>";
+        }
+        else
+        {
+            scoreText.text = "TIME: " + TimeManager.FormatTimeForHUD(timeElapsed);
+        }
+    }
+
+    void BlinkHUDText()
+    {
+        blinkTime++;
+        if(blinkTime % 40 == 0)
+        {
+            blink = !blink;
+        }
+    }
 
 	void OnPlayerKilled(){
 		spawner.isActive = false;
@@ -80,7 +97,7 @@ public class GameManager : MonoBehaviour {
 		playerDestroyScript.Killed -= OnPlayerKilled;
 
 		player.GetComponent<Rigidbody2D> ().velocity = Vector2.zero;
-		timeManager.ManipulateTime (0, 5.5f);
+		timeManager.ChangeTimeScaleTo (0, 5.5f);
 		gameStarted = false;
 
 		continueText.text = "PRESS ANY BUTTON TO RESTART";
@@ -107,11 +124,4 @@ public class GameManager : MonoBehaviour {
 		timeElapsed = 0;
 		beatBestTime = false;
 	}
-
-	string FormatTime(float value){
-		TimeSpan t = TimeSpan.FromSeconds (value);
-
-		return string.Format("{0:D2}:{1:D2}", t.Minutes, t.Seconds);
-	}
-
 }
