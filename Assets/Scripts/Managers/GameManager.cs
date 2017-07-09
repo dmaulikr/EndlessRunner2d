@@ -13,24 +13,24 @@ public class GameManager : MonoBehaviour {
 	private float bestTime = 0f;
 	private float blinkTime = 0f;
 	private bool blink;
+
 	private bool gameStarted;
-	private TimeManager timeManager;
+    private bool beatBestTime;
+
+    private TimeManager timeManager;
+
 	private GameObject player;
-	private GameObject floor;
+
 	private ObstacleSpawner spawner;
-	private bool beatBestTime;
 
 	void Awake()
     {
-		floor = GameObject.Find ("Foreground");
 		spawner = GameObject.Find ("Spawner").GetComponent<ObstacleSpawner> ();
 		timeManager = GetComponent<TimeManager> ();
 	}
 
 	void Start ()
     {
-        PositionFloor();
-
 		spawner.isActive = false;
 
         TimeManager.PauseTime();
@@ -38,17 +38,6 @@ public class GameManager : MonoBehaviour {
 
 		continueText.text = "PRESS ANY BUTTON TO START";
 	}
-
-    void PositionFloor()
-    {
-        float floorHeight = floor.transform.localScale.y;
-
-        Vector3 pos = floor.transform.position;
-        pos.x = 0;
-        pos.y = -((Screen.height / CameraScaler.pixelScale) / 2) + (floorHeight / 2);
-
-        floor.transform.position = pos;
-    }
 	
 	void Update ()
     {
