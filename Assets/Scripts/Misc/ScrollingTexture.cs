@@ -21,6 +21,6 @@ public class ScrollingTexture : MonoBehaviour {
     void UpdateTexture()
     {
         offset += speed * Time.deltaTime;
-        material.SetTextureOffset("-MainTex", offset);
+        material.SetTextureOffset("_MainTex", offset);
     }
 }
