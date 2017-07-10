@@ -4,7 +4,8 @@ public class CameraScaler : MonoBehaviour {
 
 	public static float pixelScale = 1f;
 
-	public Vector2 nativeResolution = new Vector2 (240, 160);
+    public float scale = 1f;
+	public Vector2 nativeResolution = new Vector2 (1024, 768);
 
 	void Awake ()
     {
@@ -18,7 +19,8 @@ public class CameraScaler : MonoBehaviour {
         if (camera.orthographic)
         {
             pixelScale = Screen.height / nativeResolution.y;
-            camera.orthographicSize = (Screen.height / 2.0f) / pixelScale;
+            pixelScale *= scale;
+            camera.orthographicSize = (Screen.height / 2.0f) * pixelScale;
         }
     }
 }
